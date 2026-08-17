@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chess</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="stats.css">
+
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Facebook Instant Games SDK -->
+  <script src="https://connect.facebook.net/en_US/fbinstant.latest.js"></script>
+</head>
+
+<body>
+
+  <header class="Header">
+    <h1 class="headerTitle">Chess</h1>
+    <button class="playButton">
+      <a href="index.html" class="LinkItem">Play</a>
+    </button>
+    <a href="stats.html" class="LinkItem">Stats</a>
+    <h2 class="name">Deepak IT & Web Services</h2>
+  </header>
+
+  <!-- Loading bar -->
+  <div id="loadingBar">
+    <div id="progress"></div>
+  </div>
+
+  <div class="Container">
+    <div id="Board"></div>
+  </div>
+
+  <div class="buttonsContainer">
+    <button class="resignButton" onclick="resign()">Resign</button>
+    <button class="drawButton" onclick="drawGame()">Draw</button>
+  </div>
+
+  <div class="CapturedPiecesContainer">
+    <div class="WhitePiecesCaptured"></div>
+    <div class="BlackPiecesCaptured"></div>
+  </div>
+
+
+
+  <!-- Scripts -->
+  <script src="Scripts/Pieces.js"></script>
+  <script src="Scripts/app.js"></script>
+  <script src="Scripts/ComputerPlayer.js"></script>
+
+  <script>
+    // Register service worker for PWA (using relative path ./sw.js)
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then(reg => console.log("Service Worker registered:", reg))
+          .catch(err => console.error("Service Worker failed:", err));
+      });
+    }
+
+    // Initialize Facebook Instant Games SDK
+    FBInstant.initializeAsync().then(function () {
+      function updateProgress(value) {
+        FBInstant.setLoadingProgress(value);
+        document.getElementById("progress").style.width = value + "%";
+      }
+
+      // Simulate asset loading
+      updateProgress(10);
+      updateProgress(50);
+      updateProgress(80);
+      updateProgress(100);
+
+      return FBInstant.startGameAsync();
+    }).then(function () {
+      console.log("Game session started successfully.");
+      document.getElementById("loadingBar").style.display = "none";
+    }).catch(function (error) {
+      console.error("FBInstant initialization error:", error);
+      alert("Instant Game failed to start: " + error.message);
+    });
+  </script>
+</body>
+
+</html>
